@@ -1,9 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap');
 
 body {
     text-align: center;
-    font-family: 'Segoe UI';
-    background-color: #1D3A6E; 
-    color: white; 
+    font-family: 'Merriweather', serif;
+    background-color: #4e6984; /* Cambiado a un color que se alinea con el estilo anterior */
+    color: white;
 }
 
 .head {
@@ -11,7 +12,7 @@ body {
     align-items: center;
     justify-content: space-between;
     height: 70px;
-    background: #142950;
+    background: #1D3A6E; /* Color oscuro para el encabezado */
     position: fixed;
     width: 100%;
     z-index: 100;
@@ -29,7 +30,8 @@ body {
 .Logo a {
     text-decoration: none;
     color: white;
-    font-size: 20px;
+    font-size: 22px; /* Ajustado para que coincida con el estilo anterior */
+    font-weight: 700; /* Usando un peso más fuerte para el logo */
 }
 
 .navbar a {
@@ -37,10 +39,13 @@ body {
     padding: 23px 20px;
     color: white;
     text-decoration: none;
+    font-family: 'Merriweather', serif;
+    font-weight: 400;
+    transition: background 0.3s;
 }
 
 .navbar a:hover {
-    background: #FFBD11;
+    background: #FFBD11; /* Color de fondo al pasar el mouse */
 }
 
 .content {
@@ -48,7 +53,7 @@ body {
 }
 
 .about {
-    background-color: #142950; 
+    background-color: #4e6984; /* Color de fondo alineado con el estilo general */
     padding: 50px 0;
 }
 
@@ -64,7 +69,7 @@ body {
     flex-direction: column;
     align-items: center;
     margin: 20px;
-    color: white; 
+    color: white;
 }
 
 .team-member figure {
@@ -77,13 +82,16 @@ body {
     width: auto;
     max-width: 100%;
     border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Añadido un poco de sombra */
 }
 
 .team-member figcaption {
     margin-top: 10px;
-    font-size: 16px;
+    font-size: 18px; /* Aumentado para mayor claridad */
+    font-weight: bold; /* Haciendo que el texto sea más prominente */
 }
 
+/* Media Queries */
 @media (max-width: 768px) {
     .title {
         margin-bottom: 0;
