@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="Sabermas.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <title>Sobre el Proyecto</title>
+    <title>Proyecto: Importancia del Lenguaje de Señas</title>
 </head>
 
 <body>
@@ -23,278 +23,29 @@
     </div>
 
     <section class="content saber-mas">
-        <h1 class="title">Conversión de un Modelo de PyTorch a C++ para Reconocimiento de chapas de Vehículos</h1>
+        <h1 class="title">Importancia del Lenguaje de Señas</h1>
         
         <h2>1. Introducción</h2>
-        <p>Este proyecto tiene como objetivo convertir un modelo de reconocimiento de objetos entrenado en PyTorch a ONNX y luego integrarlo en una aplicación C++ para el reconocimiento de chapas de vehículos.
-        Ahora se detalla el proceso y cómo funciona la inteligencia artificial en este proyecto.</p>
+        <p>El lenguaje de señas es un sistema de comunicación visual que permite a las personas sordas o con problemas de audición expresarse y entender a otros. Conocer el lenguaje de señas no solo es útil, sino que también promueve la inclusión y el respeto hacia las personas con discapacidad auditiva.</p>
 
-        <h2>2. Conversión del Modelo de PyTorch a ONNX</h2>
-        <p>Para iniciar la conversión, primero debemos exportar el modelo entrenado en PyTorch a un formato intermedio comúnmente utilizado, como ONNX. Este formato facilita la interoperabilidad entre diferentes frameworks de aprendizaje profundo y permite la implementación en diversas plataformas.</p>
-
-        <h3>Paso 1: Exportar el Modelo a ONNX</h3>
-        <p>Después de entrenar el modelo YOLOv5 en PyTorch, exporta el modelo a ONNX con el siguiente comando:</p>
-        <pre><code>python export.py --weights runs/train/exp/weights/best.pt --img 640 --batch 1 --device 0 --include onnx</code></pre>
-        <p>Este comando genera un archivo <code>model.onnx</code> que contiene el modelo convertido.</p>
-
-        <h2>3. Conversión de ONNX a TensorRT</h2>
-        <p>Para aplicaciones que requieren un rendimiento aún mayor, se debe convertir el modelo ONNX a TensorRT. TensorRT es una biblioteca de optimización de redes neuronales de NVIDIA que acelera la inferencia de modelos.</p>
-
-        <h3>Paso 2: Convertir ONNX a TensorRT</h3>
-        <p>Utiliza la herramienta <code>trtexec</code> para convertir el archivo ONNX a un motor TensorRT:</p>
-        <pre><code>trtexec --onnx=model.onnx --saveEngine=model.trt</code></pre>
-        <p>Este comando crea un archivo <code>model.trt</code> optimizado para inferencia rápida.</p>
-
-        <h2>4. Implementación en C++</h2>
-        <p>Con el modelo convertido a ONNX o TensorRT, el siguiente paso es implementarlo en un entorno C++. Para esto, se usa bibliotecas como onnxruntime o TensorRT.</p>
-
-        <h3>Paso 3: Cargar y Ejecutar el Modelo en C++ con onnxruntime</h3>
-        <p>El siguiente es un ejemplo de cómo cargar y ejecutar un modelo ONNX en C++ utilizando onnxruntime:</p>
-
-        <pre><code>#include &lt;cpu_provider_factory.h&gt;
-#include &lt;onnxruntime_cxx_api.h&gt;
-
-Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "ChapasDetector");
-Ort::SessionOptions session_options;
-Ort::Session session(env, "best.onnx", session_options);
-
-cv::Mat image = cv::imread("Chapa.jpg");
-cv::resize(image, image, cv::Size(640, 640));
-cv::cvtColor(image, image, cv::COLOR_BGR2RGB);
-</code></pre>
-
-        <h3>Código de detección y reconocimiento de matrículas en Python (PyTorch)</h3>
-        <p>El siguiente código en Python muestra cómo se realiza la detección y reconocimiento de matrículas utilizando YOLOv5 y PaddleOCR:</p>
-        <pre><code>import cv2
-import torch
-import numpy as np
-import os 
-from paddleocr import PaddleOCR,draw_ocr
-
-ocr = PaddleOCR(use_angle_cls=True,lang='en')
-model = torch.hub.load('ultralytics/yolov5', 'custom',path = '/home/coliveri/best.pt')
-
-path_dirs_videos = "/media/gpu"
-dir_videos = os.listdir(path_dirs_videos)
-path_video = ""
-detection = cv2.createBackgroundSubtractorMOG2(history=10000,varThreshold=12)
-y1_mov = 200
-y2_mov = 250
-x1_mov = 350
-x2_mov = 750
-y1 =250
-y2 = 560
-x1 = 350
-x2 = 1085
-
-for dir in dir_videos:
-    path_videos = os.listdir(path_dirs_videos + "/" + dir)
-    for video in path_videos:
-        path_video = path_dirs_videos + "/" + dir + "/" + video
-        extencion = video.split('.')
-        if extencion[1] == 'mp4':
-            capture = cv2.VideoCapture(path_video)
-            while capture.isOpened():
-                ret,frame = capture.read()
-                if ret ==False:
-                    break
-                cv2.rectangle(frame,(x1,y1),(x2,y2),(0,255,0),2)
-                recorte_det = frame[y1:y2,x1:x2]
-                recorte_mov = frame[y1_mov:y2_mov,x1_mov:x2_mov]
-                mascara = detection.apply(recorte_mov)
-                _,umbral = cv2.threshold(mascara,254,255,cv2.THRESH_BINARY)
-                contornos,_ = cv2.findContours(umbral,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
-                contornos = sorted(contornos,key=lambda x:cv2.contourArea(x),reverse= True)
-                for contorno in contornos:
-                    area = cv2.contourArea(contorno)
-                    if area>5000:
-                        results = model(recorte_det)
-                        try:
-                            crop = results.crop(save = False)
-                            coor = crop[0]['box']
-                            chapax1 = round(coor[0].detach().cpu().numpy()+0)
-                            chapay1 = round(coor[1].detach().cpu().numpy()+0)
-                            chapax2 = round(coor[2].detach().cpu().numpy()+0)
-                            chapay2 = round(coor[3].detach().cpu().numpy()+0)
-                            placa = frame[y1 + chapay1:y1 + chapay2,x1 + chapax1:x1 + chapax2]
-                            img_out = cv2.rectangle(frame,(x1+chapax1,y1+chapay1),(x1+chapax2,y1+chapay2),(0,255,0),2)
-                            lectura = ocr.ocr(placa,cls=True)
-                            chapa = lectura[0][0][1][0]
-                            confianza = lectura[0][0][1][1]
-                            font = cv2.FONT_HERSHEY_SIMPLEX
-                            org = (50, 50)
-                            fontScale = 1
-                            color = (0,255, 0)
-                            thickness = 2
-                            img_out = cv2.putText(img_out, chapa, (x1+chapax2,y1+chapay1), font,fontScale, color, thickness, cv2.LINE_AA)
-                            cv2.imshow('Detector de Chapas', img_out)
-                        except:
-                            cv2.imshow('Detector de Chapas', frame)
-                t = cv2.waitKey(1)
-                if t == 27:
-                    break
-            capture.release()
-            cv2.destroyAllWindows()
-</code></pre>
-
-        <h3>Código de detección y reconocimiento de matrículas en C++</h3>
-        <p>El siguiente código en C++ muestra cómo se realiza la detección y reconocimiento de matrículas utilizando OpenCV y ONNX Runtime:</p>
-        <pre><code>#include &lt;iostream&gt;
-#include &lt;opencv2/opencv.hpp&gt;
-#include &lt;onnxruntime_cxx_api.h&gt;
-#include &lt;filesystem&gt;
-
-namespace fs = std::filesystem;
-
-using namespace cv;
-using namespace std;
-
-int main() {
-    // Modelo ONNX
-    const string model_path = "/home/coliveri/best.onnx";
-
-    // ONNX Runtime
-    Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "Detector");
-    Ort::SessionOptions session_options;
-    session_options.SetIntraOpNumThreads(1);
-    Ort::Session session(env, model_path.c_str(), session_options);
-
-    // Máscara para detección de cuerpos en movimiento
-    Ptr<BackgroundSubtractorMOG2> detection = createBackgroundSubtractorMOG2(10000, 12, false);
-
-    // Zonas de detección
-    int y1_mov = 200, y2_mov = 250, x1_mov = 350, x2_mov = 750;
-    int y1 = 250, y2 = 560, x1 = 350, x2 = 1085;
-
-    // Directorio contenedor de videos
-    const string path_dirs_videos = "/media/gpu";
-
-    for (const auto& entry : fs::directory_iterator(path_dirs_videos)) {
-        if (fs::is_directory(entry)) {
-            for (const auto& video : fs::directory_iterator(entry.path())) {
-                if (video.path().extension() == ".mp4") {
-                    string path_video = video.path().string();
-
-                    // Captura de los frames del video
-                    VideoCapture capture(path_video);
-
-                    if (!capture.isOpened()) {
-                        cerr << "Error al abrir el video: " << path_video << endl;
-                        continue;
-                    }
-
-                    // Bucle de detección de chapas
-                    while (capture.isOpened()) {
-                        Mat frame;
-                        capture >> frame;
-
-                        if (frame.empty())
-                            break;
-
-                        // Rectángulo en Área de interés
-                        rectangle(frame, Point(x1, y1), Point(x2, y2), Scalar(0, 255, 0), 2);
-
-                        // Área de interés
-                        Mat recorte_det = frame(Rect(x1, y1, x2 - x1, y2 - y1));
-                        Mat recorte_mov = frame(Rect(x1_mov, y1_mov, x2_mov - x1_mov, y2_mov - y1_mov));
-
-                        // Máscara de detección de movimiento
-                        Mat mascara;
-                        detection->apply(recorte_mov, mascara);
-                        threshold(mascara, mascara, 254, 255, THRESH_BINARY);
-
-                        vector<vector<Point>> contornos;
-                        findContours(mascara, contornos, RETR_TREE, CHAIN_APPROX_SIMPLE);
-
-                        for (const auto& contorno : contornos) {
-                            double area = contourArea(contorno);
-                            if (area > 5000) {
-
-                                cv::resize(recorte_det, recorte_det, cv::Size(640, 640));
-                                cv::cvtColor(recorte_det, recorte_det, cv::COLOR_BGR2RGB);
-                                recorte_det.convertTo(recorte_det, CV_32F, 1.0 / 255);
-
-                                std::vector<int64_t> input_shape = {1, 3, 640, 640};
-                                std::vector<float> input_tensor_values;
-                                input_tensor_values.assign((float*)recorte_det.datastart, (float*)recorte_det.dataend);
-
-                                auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
-                                Ort::Value input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_tensor_values.data(), input_tensor_values.size(), input_shape.data(), input_shape.size());
-
-                                // Nombres de entradas y salidas del modelo ONNX
-                                const char* input_names[] = {"images"};
-                                const char* output_names[] = {"output"};
-
-                                auto output_tensors = session.Run(Ort::RunOptions{nullptr}, input_names, &input_tensor, 1, output_names, 1);
-                                float* raw_output = output_tensors.front().GetTensorMutableData<float>();
-
-                                // Resultados
-                                vector<Rect> boxes;
-                                vector<float> scores;
-                                for (int i = 0; i < 100; ++i) {
-                                    if (raw_output[4] > 0.5) {
-                                        int x = raw_output[0] * frame.cols;
-                                        int y = raw_output[1] * frame.rows;
-                                        int w = raw_output[2] * frame.cols - x;
-                                        int h = raw_output[3] * frame.rows - y;
-                                        boxes.emplace_back(x, y, w, h);
-                                        scores.push_back(raw_output[4]);
-                                    }
-                                    raw_output += 85;
-                                }
-
-                                for (size_t i = 0; i < boxes.size(); ++i) {
-                                    rectangle(frame, boxes[i], Scalar(0, 255, 0), 2);
-                                    putText(frame, to_string(scores[i]), Point(boxes[i].x, boxes[i].y - 10), FONT_HERSHEY_SIMPLEX, 0.9, Scalar(0, 255, 0), 2);
-                                }
-
-                                imshow("Detector de Chapas", frame);
-                            }
-                        }
-
-                        if (waitKey(1) == 27)
-                            break;
-                    }
-                    capture.release();
-                    destroyAllWindows();
-                }
-            }
-        }
-    }
-
-    return 0;
-}
-</code></pre>
-
-        <h2>Diferencias entre PyTorch y C++</h2>
-        <p>Al convertir un modelo de PyTorch a C++, es importante entender las diferencias clave entre ambos entornos:</p>
-
-        <h3>Optimización</h3>
+        <h2>2. ¿Por qué es importante conocer el lenguaje de señas?</h2>
         <ul>
-            <li>PyTorch ofrece flexibilidad y es ideal para investigación y desarrollo rápido.</li>
-            <li>C++ permite un mayor control sobre la optimización a nivel de hardware, resultando en una ejecución más eficiente en producción.</li>
+            <li><strong>Comunicación efectiva:</strong> Permite una comunicación clara y directa con personas sordas, eliminando barreras de comunicación.</li>
+            <li><strong>Inclusión social:</strong> Facilita la integración de las personas con discapacidad auditiva en diferentes contextos sociales, laborales y educativos.</li>
+            <li><strong>Empatía y respeto:</strong> Aprender el lenguaje de señas muestra un compromiso hacia la diversidad y el respeto por las diferencias individuales.</li>
+            <li><strong>Acceso a la información:</strong> Ayuda a garantizar que las personas sordas tengan acceso a la misma información que las personas oyentes, especialmente en situaciones de emergencia.</li>
         </ul>
 
-        <h3>Velocidad</h3>
+        <h2>3. Beneficios del aprendizaje del lenguaje de señas</h2>
+        <p>El aprendizaje del lenguaje de señas ofrece múltiples beneficios, no solo para quienes lo enseñan, sino también para quienes lo aprenden:</p>
         <ul>
-            <li>La ejecución en PyTorch puede ser más lenta debido a la interpretación y overhead.</li>
-            <li>C++ ofrece una mayor velocidad y eficiencia, especialmente cuando se utilizan bibliotecas optimizadas como TensorRT.</li>
+            <li><strong>Desarrollo de habilidades cognitivas:</strong> Aprender un nuevo idioma, como el lenguaje de señas, estimula el cerebro y mejora la memoria y la atención.</li>
+            <li><strong>Mejoras en la percepción visual:</strong> La práctica del lenguaje de señas puede agudizar la capacidad de observación y la atención al detalle.</li>
+            <li><strong>Fortalecimiento de la comunidad:</strong> El aprendizaje del lenguaje de señas fomenta un sentido de comunidad y conexión entre oyentes y personas sordas.</li>
         </ul>
 
-        <h3>Desarrollo</h3>
-        <ul>
-            <li>PyTorch facilita el desarrollo rápido de prototipos y cuenta con un extenso soporte para debugging y visualización.</li>
-            <li>C++ requiere un desarrollo más detallado y complejo, con un mayor tiempo de depuración, pero es esencial para aplicaciones de alto rendimiento.</li>
-        </ul>
-
-        <h3>Portabilidad</h3>
-        <ul>
-            <li>PyTorch es compatible con múltiples plataformas, pero depende del entorno Python.</li>
-            <li>C++ tiene mayor portabilidad y puede integrarse más fácilmente en diversos sistemas y hardware sin la necesidad de un intérprete.</li>
-        </ul>
-
-        <h2>Conclusión</h2>
-        <p>La conversión de un modelo de PyTorch a C++ es un paso crucial para llevar modelos de investigación a producción. Permite aprovechar las ventajas de optimización y velocidad de C++, asegurando que las aplicaciones de reconocimiento de placas de vehículos sean eficientes y rápidas en entornos del mundo real.</p>
+        <h2>4. Conclusión</h2>
+        <p>Conocer el lenguaje de señas es fundamental para crear un entorno más inclusivo y accesible. A través de su aprendizaje, se pueden construir puentes entre diferentes comunidades, promoviendo la igualdad y el respeto por la diversidad.</p>
     </section>
 </body>
 </html>
