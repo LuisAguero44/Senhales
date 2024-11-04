@@ -3,7 +3,7 @@
 body {
     text-align: center;
     font-family: 'Merriweather', serif;
-    background-color: #4e6984; /* Cambiado a un color que se alinea con el estilo anterior */
+    background-color: #4e6984;
     color: white;
 }
 
@@ -82,13 +82,13 @@ body {
     width: auto;
     max-width: 100%;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Añadido un poco de sombra */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
 }
 
 .team-member figcaption {
     margin-top: 10px;
-    font-size: 18px; /* Aumentado para mayor claridad */
-    font-weight: bold; /* Haciendo que el texto sea más prominente */
+    font-size: 18px;
+    font-weight: bold; 
 }
 
 /* Media Queries */
