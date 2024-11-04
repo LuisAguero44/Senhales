@@ -1,0 +1,219 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+body {
+    text-align: center;
+    font-family: 'Segoe UI', sans-serif;
+    background-size: cover; 
+}
+
+.head {
+    padding: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 55px;
+    background: #4e6984;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+}
+
+.navbar {
+    display: flex;
+    margin-right: 10px;
+}
+
+.Logo {
+    margin-left: 30px;
+}
+
+.Logo a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+}
+
+.navbar a {
+    display: block;
+    padding: 23px 20px;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    background: #37474F;
+}
+
+.header {
+    padding-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url(Head.png) no-repeat center;
+    background-size: cover;
+}
+
+.title {
+    margin-bottom: 40px;
+    font-size: 60px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+}
+
+p {
+    margin-bottom: 40px;
+    font-size: 18px;
+    color: white;
+    padding: 0 100px;
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 60px;
+    border: 2px solid #4e6984;
+    color: white;
+    text-decoration: none;
+    background: #4e6984;
+}
+
+.btn:hover {
+    background: none;
+    
+}
+
+.btn-home {
+    display: flex;
+    
+}
+
+.btn-home a {
+    margin: 0 10px;
+}
+
+.content {
+    height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.inicio {
+    padding-top: 100px;
+    background: #4e6984;
+    background-size: cover;
+}
+
+.box-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.box-container .box {
+    height: 11rem;
+    width: 17rem;
+    background: #4e6984;
+    text-align: center;
+    border-radius: 1rem;
+    box-shadow: 0 .3rem 5rem rgba(0, 0, 0, .5);
+    margin: 2rem;
+}
+
+.box-container .box i {
+    height: 3rem;
+    width: 3rem;
+    line-height: 3rem;
+    text-align: center;
+    border-radius: 50%;
+    color: white;
+    background: #37474F;
+    font-size: 2rem;
+    margin: 1rem 0;
+}
+
+.box-container .box h3 {
+    font-size: 20px;
+    color: #ffff;
+}
+
+.box-container .box p {
+    padding: 0 15px;
+    font-size: 16px;
+}
+
+.Nosotros {
+    background: #4e6984;
+    background-size: cover;
+    padding-top: 90px;
+    height: 95vh;
+}
+
+.team-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.team-member {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.team-member figure {
+    margin: 0;
+    text-align: center;
+}
+
+.team-member img {
+    height: 220px;
+    width: auto;
+    max-width: 100%;
+}
+
+.team-member figcaption {
+    margin-top: 10px;
+    font-size: 16px;
+    color: white;
+}
+
+.Proceso {
+    padding-top: 100px;
+    background: url(Head.png) no-repeat center;
+    background-attachment: fixed;
+    background-size: cover;
+    text-align: center;
+}
+
+.Resultados {
+    padding-top: 70px;
+    background: #4e6984;
+    background-size: cover; 
+    padding-bottom: 100px;
+}
+
+@media (max-width: 768px) {
+    .title {
+        margin-bottom: 0;
+        font-size: 40px;
+    }
+    .sau {
+        height: 120vh;
+    }
+    .navbar {
+        display: none;
+    }
+}
