@@ -1,4 +1,5 @@
-opencv-python
-imutils
-mediapipe
 numpy
+opencv-python
+mediapipe
+tensorflow
+scikit-learn
